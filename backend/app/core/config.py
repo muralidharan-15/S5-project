@@ -1,10 +1,42 @@
 import os
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 class Settings:
     PROJECT_NAME: str = "Tamil Nadu Flood Alert & Risk Prediction System API"
     VERSION: str = "2.0.0"
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = os.getenv("SECRET_KEY", "tn-flood-alert-secret-key-2026")
+    
+    # Configuration-driven CORS origins (comma-separated env var)
+    ALLOWED_ORIGINS: list[str] = [
+        origin.strip() for origin in os.getenv(
+            "ALLOWED_ORIGINS",
+            "http://localhost:5173,http://127.0.0.1:5173"
+        ).split(",") if origin.strip()
+    ]
+
+    # Database Configuration
+    DB_HOST: str = os.getenv("DB_HOST", "localhost")
+    DB_USER: str = os.getenv("DB_USER", "root")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "")
+    DB_NAME: str = os.getenv("DB_NAME", "flood_alert")
+
+    # Twilio SMS / WhatsApp Configuration
+    TWILIO_ACCOUNT_SID: str = os.getenv("TWILIO_ACCOUNT_SID", "")
+    TWILIO_AUTH_TOKEN: str = os.getenv("TWILIO_AUTH_TOKEN", "")
+    TWILIO_PHONE_NUMBER: str = os.getenv("TWILIO_PHONE_NUMBER", "")
+
+    # Email / SMTP Configuration
+    SMTP_SERVER: str = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    ALERT_EMAIL_SENDER: str = os.getenv("ALERT_EMAIL_SENDER", "")
+    ALERT_EMAIL_PASSWORD: str = os.getenv("ALERT_EMAIL_PASSWORD", "")
+    DEFAULT_ALERT_RECIPIENT: str = os.getenv("DEFAULT_ALERT_RECIPIENT", "officials@tn.gov.in")
     
     # Coordinates of all 38 Tamil Nadu districts
     DISTRICTS: dict = {
