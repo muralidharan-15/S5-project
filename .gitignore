@@ -1,4 +1,18 @@
+# Python
 venv/
+.venv/
 __pycache__/
 *.pyc
 .env
+*.log
+
+# Node & React
+node_modules/
+dist/
+.vite/
+
+# IDE & OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
