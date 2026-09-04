@@ -1,0 +1,24 @@
+{
+  "name": "FloodGuard — Flood Risk Intelligence",
+  "short_name": "FloodGuard",
+  "description": "AI-powered flood risk prediction, dam level monitoring, and emergency warning platform.",
+  "start_url": "/static/mobile_app.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#0284C7",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230284C7'/><path d='M50 20s25 12 25 30v20c0 18-25 30-25 30S25 82 25 64V50c0-18 25-30 25-30z' fill='none' stroke='%23FFFFFF' stroke-width='6'/><path d='M20 50c15 0 15-8 30-8s15 8 30 8' fill='none' stroke='%2306B6D4' stroke-width='6'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230284C7'/><path d='M50 20s25 12 25 30v20c0 18-25 30-25 30S25 82 25 64V50c0-18 25-30 25-30z' fill='none' stroke='%23FFFFFF' stroke-width='6'/><path d='M20 50c15 0 15-8 30-8s15 8 30 8' fill='none' stroke='%2306B6D4' stroke-width='6'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

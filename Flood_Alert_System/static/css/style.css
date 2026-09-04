@@ -1,0 +1,707 @@
+/* =========================================================
+   FLOOD ALERT & WEATHER PREDICTION SYSTEM STYLES
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #0284c7 0%, #1e40af 100%);
+    --accent-blue: #0284c7;
+    --accent-purple: #9333ea;
+    --success-gradient: linear-gradient(135deg, #0369a1 0%, #0284c7 50%, #38bdf8 100%);
+    --warning-gradient: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+    --danger-gradient: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #ef4444 100%);
+    --card-bg: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border-color: #e2e8f0;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #ffffff !important;
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #0f172a;
+}
+
+/* NAVBAR */
+.navbar-custom {
+    background: #ffffff;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.navbar-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    color: #0f172a !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-link {
+    color: #475569 !important;
+    font-weight: 600;
+    padding: 0.5rem 1rem !important;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #0284c7 !important;
+}
+
+/* HERO BANNER GLASS STYLES */
+.glass-pill {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(8px);
+}
+
+.glass-advisory-bar {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* HERO BANNER */
+.hero-banner {
+    background: var(--primary-gradient);
+    color: #ffffff;
+    padding: 3.5rem 0 5rem 0;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-banner h1, .hero-banner h2, .hero-banner h3, .hero-banner h4, .hero-banner h5, .hero-banner h6 {
+    color: #ffffff !important;
+}
+
+.hero-title {
+    font-weight: 800;
+    font-size: 2.5rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.75rem;
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    color: #e0f2fe;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* GLASSMORPHISM CARDS */
+.custom-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
+    color: #0f172a;
+}
+
+.custom-card:hover {
+    border-color: #0284c7;
+    box-shadow: 0 15px 35px -5px rgba(2, 132, 199, 0.12), 0 0 15px rgba(2, 132, 199, 0.08);
+}
+
+.text-dark {
+    color: #0f172a !important;
+}
+
+.text-muted {
+    color: #64748b !important;
+}
+
+.bg-light {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+    border-color: #e2e8f0 !important;
+}
+
+/* ULTRA HIGH QUALITY TAMIL NADU MAP STYLING */
+#tnMapContainer {
+    width: 100%;
+    height: 480px;
+    border-radius: 16px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+    z-index: 1;
+    background: #f8fafc;
+    position: relative;
+}
+
+.map-overlay-info {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px 18px;
+    color: #0f172a;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    min-width: 220px;
+    transition: all 0.25s ease;
+}
+
+.map-overlay-info h6 {
+    margin-bottom: 2px;
+    font-weight: 800;
+    color: #0284c7 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.leaflet-popup-content-wrapper {
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(16px);
+    color: #0f172a !important;
+    border-radius: 14px !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+    padding: 4px !important;
+}
+
+.leaflet-popup-tip {
+    background: rgba(255, 255, 255, 0.98) !important;
+}
+
+.map-district-popup {
+    text-align: center;
+    padding: 6px 10px;
+}
+
+.map-district-popup h6 {
+    margin-bottom: 4px;
+    font-weight: 800;
+    color: #0f172a !important;
+    font-size: 1.05rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.map-district-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 16px;
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.map-district-btn:hover {
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+    transform: translateY(-1px);
+}
+
+/* CUSTOM HIGH-TECH PULSING MAP MARKER */
+.custom-map-pin {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0ea5e9;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 15px #0ea5e9, 0 0 25px rgba(14, 165, 233, 0.5);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.custom-map-pin.active-pin {
+    background: #0284c7;
+    width: 26px;
+    height: 26px;
+    border: 4px solid #ffffff;
+    box-shadow: 0 0 20px #0284c7, 0 0 35px rgba(2, 132, 199, 0.6);
+    animation: pinPulse 1.8s infinite;
+}
+
+@keyframes pinPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6); }
+    70% { transform: scale(1.15); box-shadow: 0 0 0 14px rgba(2, 132, 199, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
+}
+
+/* ULTRA GRAPH CONTAINER STYLING */
+.ultra-graph-card {
+    background: #ffffff;
+    color: #0f172a;
+    border-radius: var(--radius-lg);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.ultra-graph-card h4 {
+    color: #0f172a !important;
+}
+
+.graph-control-btn {
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid #cbd5e1;
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.graph-control-btn:hover, .graph-control-btn.active {
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+    color: #ffffff;
+    border-color: #0284c7;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+/* RISK BANNERS */
+.risk-banner {
+    border-radius: var(--radius-lg);
+    color: #ffffff !important;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.risk-banner h1, .risk-banner h2, .risk-banner h3, .risk-banner h4, .risk-banner h5, .risk-banner h6 {
+    color: #ffffff !important;
+}
+
+.risk-banner.LOW {
+    background: var(--success-gradient);
+}
+
+.risk-banner.MODERATE {
+    background: var(--warning-gradient);
+}
+
+.risk-banner.HIGH {
+    background: var(--danger-gradient);
+}
+
+.risk-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* DISTRICT PILLS */
+.district-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 30px;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.district-btn:hover {
+    background: #e2e8f0;
+    border-color: #0284c7;
+    color: #0f172a;
+    transform: translateY(-2px);
+}
+
+.district-btn.active {
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+    color: #ffffff;
+    border-color: #0284c7;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+/* METRIC BOXES */
+.metric-box {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.metric-box:hover {
+    background: #ffffff;
+    border-color: #0284c7;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.temp-box {
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    border-color: #fed7aa;
+}
+
+.humidity-box {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-color: #bae6fd;
+}
+
+.rain-box {
+    background: linear-gradient(135deg, #ecfeff 0%, #cffaff 100%);
+    border-color: #a5f3fc;
+}
+
+.forecast-box {
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+    border-color: #e9d5ff;
+}
+
+.metric-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.metric-box:hover .metric-icon {
+    transform: scale(1.2) rotate(6deg);
+}
+
+.metric-value {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #0f172a;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+/* CHART CONTAINER */
+.chart-wrapper {
+    position: relative;
+    min-height: 360px;
+    width: 100%;
+}
+
+/* ACCORDION */
+.accordion-custom .accordion-button {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    border-radius: var(--radius-md) !important;
+    background: #f8fafc;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+}
+
+.accordion-custom .accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+    color: #ffffff;
+}
+
+.accordion-custom .accordion-body {
+    background: #ffffff;
+    color: #334155;
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+}
+
+/* REACT ANIMATION COMPONENTS STYLING */
+.react-radar-pulse {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #0284c7;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.react-radar-sweep {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border-top: 2px solid #0369a1;
+    animation: radarSpin 2s linear infinite;
+}
+
+@keyframes radarSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.react-interactive-card {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.react-interactive-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 14px 28px rgba(2, 132, 199, 0.15);
+}
+
+.react-checklist-item {
+    padding: 14px 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: #0f172a;
+}
+
+.react-checklist-item:hover {
+    background: #f1f5f9;
+    border-color: #0284c7;
+    transform: translateX(4px);
+}
+
+.react-checklist-item.completed {
+    background: #e0f2fe;
+    border-color: #38bdf8;
+}
+
+.react-checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.react-checklist-item.completed .react-checkbox {
+    background: #0284c7;
+    border-color: #0284c7;
+}
+
+/* FOOTER */
+footer {
+    background: #ffffff;
+    color: #64748b;
+    padding: 2.5rem 0;
+    margin-top: 4rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* =========================================================
+   EXECUTIVE THREAT ASSESSMENT CARD & SHAP STYLES
+   ========================================================= */
+.threat-assessment-card {
+    background: #ffffff !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12), 0 8px 16px -8px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid #e2e8f0 !important;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.threat-accent-bar {
+    height: 5px;
+    width: 100%;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.pulse-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+}
+
+.pulse-success {
+    background-color: #10b981;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+    animation: pulse-green 2s infinite;
+}
+
+.pulse-warning {
+    background-color: #f59e0b;
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6);
+    animation: pulse-amber 2s infinite;
+}
+
+.pulse-danger {
+    background-color: #ef4444;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+@keyframes pulse-amber {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+@keyframes pulse-red {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.threat-status-badge {
+    padding: 0.4rem 0.9rem;
+    border-radius: 50rem;
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.badge-threat-low {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+.badge-threat-moderate {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.badge-threat-high {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.risk-percentage-val {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+
+.text-emerald-600 {
+    color: #059669 !important;
+}
+
+.bg-emerald-500 {
+    background-color: #10b981 !important;
+}
+
+.advisory-callout-box {
+    border-radius: 12px;
+    border: 1px solid transparent;
+}
+
+.advisory-success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.advisory-warning {
+    background: #fffbeb;
+    border-color: #fef3c7;
+}
+
+.advisory-danger {
+    background: #fff1f2;
+    border-color: #fecdd3;
+}
+
+.badge-shap-engine {
+    background: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+    padding: 0.2rem 0.65rem;
+    border-radius: 50rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.shap-rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+.rank-1 {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.rank-2 {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.rank-3 {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.rank-fill-1 {
+    background: linear-gradient(90deg, #0284c7 0%, #2563eb 100%);
+}
+
+.rank-fill-2 {
+    background: linear-gradient(90deg, #38bdf8 0%, #0284c7 100%);
+}
+
+.rank-fill-3 {
+    background: linear-gradient(90deg, #94a3b8 0%, #64748b 100%);
+}
