@@ -22,12 +22,12 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Enable CORS for React frontend
+# Configuration-driven CORS Middleware (No wildcarding for security hardening)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows Vite React frontend on any port/host
+    allow_origins=settings.ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -40,5 +40,6 @@ def root():
         "status": "online",
         "system": settings.PROJECT_NAME,
         "version": settings.VERSION,
+        "allowed_origins": settings.ALLOWED_ORIGINS,
         "docs": "/docs"
     }
