@@ -52,14 +52,32 @@ def calculate_realistic_probability(features_df, model_result):
             inp = features_df
 
         probs = rainfall_model.predict_proba(inp)[0]
-        confidence = float(np.max(probs) * 100.0)
+        
+        # Extract rainfall accumulation and environmental factors
+        r7 = float(features_df["Rainfall_7Day"].iloc[0]) if "Rainfall_7Day" in features_df else 10.0
+        r1 = float(features_df["Rainfall_1Day"].iloc[0]) if "Rainfall_1Day" in features_df else 2.0
+        coastal = float(features_df["CoastalVulnerability"].iloc[0]) if "CoastalVulnerability" in features_df else 2.0
+        urban = float(features_df["Urbanization"].iloc[0]) if "Urbanization" in features_df else 5.0
+        
+        p_mod = float(probs[1]) if len(probs) > 1 else 0.0
+        p_high = float(probs[2]) if len(probs) > 2 else 0.0
+        base_flood_score = p_mod * 55.0 + p_high * 95.0
 
         if model_result == 0:
-            return round(max(5.0, min(30.0, confidence)), 1)
+            # Low Risk tier: dynamically scales between 5.0% and 38.0% based on live rain and local vulnerability
+            rain_stress = min(20.0, (r7 / 50.0) * 15.0 + (r1 / 15.0) * 5.0)
+            env_stress = (coastal / 10.0) * 4.0 + (urban / 10.0) * 3.0
+            val = max(5.0, min(38.0, 5.0 + rain_stress + env_stress + base_flood_score * 0.3))
+            return round(val, 1)
         elif model_result == 1:
-            return round(max(40.0, min(75.0, confidence)), 1)
+            # Moderate Risk tier: scales between 40.0% and 74.0%
+            val = max(40.0, min(74.0, 40.0 + (r7 / 100.0) * 20.0 + base_flood_score * 0.4))
+            return round(val, 1)
         else:
-            return round(max(75.0, min(99.0, confidence)), 1)
+            # High Risk tier: scales between 75.0% and 99.0%
+            val = max(75.0, min(99.0, 75.0 + (r7 / 200.0) * 20.0 + base_flood_score * 0.1))
+            return round(val, 1)
     except Exception as e:
         print("Probability calculation exception:", e)
         return 15.0
+
