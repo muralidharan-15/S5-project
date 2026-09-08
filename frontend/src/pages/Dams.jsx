@@ -3,6 +3,7 @@ import { fetchDashboardData } from '../api/floodApi';
 
 const Dams = ({ district = 'Virudhunagar', onSelectDistrict }) => {
   const [damDetails, setDamDetails] = useState(null);
+  const [isOffline, setIsOffline] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -10,6 +11,7 @@ const Dams = ({ district = 'Virudhunagar', onSelectDistrict }) => {
       setLoading(true);
       try {
         const res = await fetchDashboardData(district);
+        setIsOffline(res?.isOffline || false);
         if (res?.dam_details) {
           setDamDetails(res.dam_details);
         }
@@ -84,6 +86,28 @@ const Dams = ({ district = 'Virudhunagar', onSelectDistrict }) => {
   return (
     <div className="w-full max-w-[1440px] mx-auto px-container-padding-mobile md:px-container-padding-desktop py-stack-md flex flex-col items-center pb-32 animate-fadeIn">
       <div className="w-full md:max-w-3xl flex flex-col gap-stack-lg">
+        {/* Offline Safety Alert */}
+        {isOffline && (
+          <div className="bg-slate-900 text-white rounded-2xl p-4 md:p-5 flex items-start gap-3.5 border border-slate-700 shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center shrink-0 border border-red-500/30">
+              <span className="material-symbols-outlined text-2xl">cloud_off</span>
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-red-400">
+                  Hydro-Basin Telemetry Disconnected
+                </span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-950 text-red-300 border border-red-800">
+                  Offline
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Dam spillway discharge and live storage sensors are disconnected. Unverified flood discharges are withheld to avoid misinformation. Dial 1070 for emergency flood control.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Header Section */}
         <section className="flex flex-col gap-2">
           <h1 className="text-[28px] md:text-[32px] font-bold text-[#0F172A] tracking-tight leading-tight">
@@ -110,14 +134,23 @@ const Dams = ({ district = 'Virudhunagar', onSelectDistrict }) => {
               </div>
             </div>
             <div className="flex flex-col items-end text-right">
-              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-100">
-                <div className="w-2 h-2 rounded-full bg-emerald-600 live-dot" />
-                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">
-                  Live Data
-                </span>
-              </div>
+              {isOffline ? (
+                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-300">
+                  <div className="w-2 h-2 rounded-full bg-slate-400" />
+                  <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                    Offline
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-100">
+                  <div className="w-2 h-2 rounded-full bg-emerald-600 live-dot" />
+                  <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">
+                    Live Data
+                  </span>
+                </div>
+              )}
               <span className="text-[12px] text-slate-500 mt-1.5 font-medium">
-                Updated {damDetails?.last_updated || '6 mins ago'}
+                {isOffline ? 'Sensor stream offline' : `Updated ${damDetails?.last_updated || '6 mins ago'}`}
               </span>
             </div>
           </div>
