@@ -2,15 +2,21 @@ import axios from 'axios';
 import { Capacitor } from '@capacitor/core';
 
 // Determine Base URL dynamically:
-// 1. Explicit env variable (if defined)
-// 2. Android Emulator (Capacitor native platform -> 10.0.2.2)
-// 3. Browser environment: use relative '/api/v1/flood' so Vite proxy routes to localhost:8000 without CORS
+// 1. Capacitor native mobile app -> use cloud tunnel (VITE_API_BASE_URL) or Android emulator
+// 2. Local browser (localhost / 127.0.0.1) -> use local proxy '/api/v1/flood' -> http://127.0.0.1:8000
+// 3. Remote web browser -> use VITE_API_BASE_URL
 const getBaseUrl = () => {
+  if (Capacitor.isNativePlatform()) {
+    if (import.meta.env.VITE_API_BASE_URL) {
+      return `${import.meta.env.VITE_API_BASE_URL}/api/v1/flood`;
+    }
+    return 'http://10.0.2.2:8000/api/v1/flood';
+  }
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return '/api/v1/flood';
+  }
   if (import.meta.env.VITE_API_BASE_URL) {
     return `${import.meta.env.VITE_API_BASE_URL}/api/v1/flood`;
-  }
-  if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android') {
-    return 'http://10.0.2.2:8000/api/v1/flood';
   }
   return '/api/v1/flood';
 };

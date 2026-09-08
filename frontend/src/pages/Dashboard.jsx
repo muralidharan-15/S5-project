@@ -233,33 +233,6 @@ const Dashboard = ({
             </div>
           </div>
         </div>
-
-        {/* Quick Selection Chips */}
-        <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center gap-2">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider shrink-0 flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm text-slate-400">touch_app</span>
-            Quick Switch:
-          </span>
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar flex-wrap">
-            {['Virudhunagar', 'Chennai', 'Coimbatore', 'Madurai', 'Cuddalore', 'Salem', 'Tiruchirappalli', 'Kanyakumari', 'Thanjavur', 'Tirunelveli'].map((d) => {
-              const isSelected = district === d;
-              return (
-                <button
-                  key={d}
-                  onClick={() => onSelectDistrict && onSelectDistrict(d)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1 ${
-                    isSelected
-                      ? 'bg-primary text-white shadow-xs font-bold'
-                      : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700 active:scale-95'
-                  }`}
-                >
-                  {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
-                  {d}
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </div>
 
       {/* Bento Grid */}
