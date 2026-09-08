@@ -168,41 +168,10 @@ const Dashboard = ({
               <span className="material-symbols-outlined text-2xl">location_on</span>
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Target District Monitoring
                 </span>
-                <span
-                  id="manual-badge"
-                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200"
-                >
-                  Manual Selection
-                </span>
-                {loading ? (
-                  <span
-                    id="telemetry-loading-badge"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-                    Syncing Live Telemetry...
-                  </span>
-                ) : data?.isFallback ? (
-                  <span
-                    id="fallback-badge"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span>
-                    Estimated Data (Live Offline)
-                  </span>
-                ) : (
-                  <span
-                    id="live-telemetry-badge"
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Live Satellite & Hydro AI
-                  </span>
-                )}
               </div>
               <h2 className="text-xl md:text-2xl font-bold tracking-tight text-[#0F172A]">
                 {district}, Tamil Nadu
@@ -427,65 +396,6 @@ const Dashboard = ({
           </div>
         </div>
 
-        {/* 2.5 EMERGENCY HELPLINES DIRECT CARD */}
-        <div className={`md:col-span-12 rounded-2xl border p-5 md:p-6 shadow-sm transition-all ${
-          isOffline
-            ? 'bg-slate-900 border-slate-700 text-white'
-            : 'bg-white border-[#E2E8F0] text-slate-900'
-        }`}>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3.5">
-              <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                isOffline ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-red-50 text-red-600 border border-red-100'
-              }`}>
-                <span className="material-symbols-outlined text-2xl">emergency</span>
-              </div>
-              <div>
-                <h3 className={`text-sm font-bold tracking-tight uppercase flex items-center gap-2 ${
-                  isOffline ? 'text-white' : 'text-[#0F172A]'
-                }`}>
-                  24x7 Disaster Emergency Helplines
-                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-                    isOffline ? 'bg-red-500 text-white' : 'bg-red-100 text-red-800'
-                  }`}>
-                    Toll Free
-                  </span>
-                </h3>
-                <p className={`text-xs mt-0.5 ${isOffline ? 'text-slate-300' : 'text-slate-500'}`}>
-                  Direct lines to State & District Emergency Operations Centres during adverse weather
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <a
-                href="tel:1070"
-                className="px-4 py-2.5 bg-red-600 hover:bg-red-700 active:scale-95 text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-sm filled">call</span>
-                <span>1070 State Disaster</span>
-              </a>
-              <a
-                href="tel:1077"
-                className="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-sm filled">call</span>
-                <span>1077 District Control</span>
-              </a>
-              <a
-                href="tel:112"
-                className={`px-4 py-2.5 active:scale-95 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-xs cursor-pointer ${
-                  isOffline
-                    ? 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300'
-                }`}
-              >
-                <span className="material-symbols-outlined text-sm filled">local_police</span>
-                <span>112 Police / NDRF</span>
-              </a>
-            </div>
-          </div>
-        </div>
 
         {/* 3. FORECAST ROW (72-Hour Forecast) */}
         <div className="md:col-span-12">
