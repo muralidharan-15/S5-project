@@ -14,12 +14,17 @@ from app.ml.predict import build_feature_dataframe
 
 CSV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "rainfall_features.csv")
 
+# In-memory telemetry cache to avoid blocking on slow external APIs
+_SOIL_MOISTURE_CACHE: dict[str, float] = {}
+_RIVER_DISCHARGE_CACHE: dict[str, float] = {}
+_WAVE_HEIGHT_CACHE: dict[str, float] = {}
+
 
 async def get_live_weather_and_telemetry_async(district: str) -> dict:
     """
     Concurrently fetches Open-Meteo Weather, Open-Meteo Flood, Open-Meteo Marine (for coastal districts),
     and NASA POWER Satellite telemetry using asyncio.gather and httpx.AsyncClient.
-    Latency is bounded by the slowest single external request rather than sequential accumulation.
+    Latency is bounded by caching non-volatile satellite soil moisture and river discharge.
     """
     if district not in settings.DISTRICTS:
         district = "Coimbatore"
@@ -67,16 +72,17 @@ async def get_live_weather_and_telemetry_async(district: str) -> dict:
     headers = {"User-Agent": "FloodAlertSystem/1.0 (contact@tn.gov.in)"}
 
     try:
-        async with httpx.AsyncClient(timeout=httpx.Timeout(4.5, connect=2.5), headers=headers) as client:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(2.5, connect=1.2), headers=headers) as client:
             req_weather = client.get(weather_url)
-            req_flood = client.get(flood_url)
-            req_marine = client.get(marine_url) if marine_url else asyncio.sleep(0, result=None)
-            req_nasa = client.get(nasa_url)
+            req_flood = client.get(flood_url) if district not in _RIVER_DISCHARGE_CACHE else asyncio.sleep(0, result=None)
+            req_marine = client.get(marine_url) if (is_coastal and district not in _WAVE_HEIGHT_CACHE) else asyncio.sleep(0, result=None)
+            req_nasa = client.get(nasa_url) if district not in _SOIL_MOISTURE_CACHE else asyncio.sleep(0, result=None)
 
             res_weather, res_flood, res_marine, res_nasa = await asyncio.gather(
                 req_weather, req_flood, req_marine, req_nasa,
                 return_exceptions=True
             )
+
 
         # 1. Parse Live Weather
         if not isinstance(res_weather, Exception) and res_weather.status_code == 200:
@@ -119,43 +125,50 @@ async def get_live_weather_and_telemetry_async(district: str) -> dict:
             env = get_district_environmental_features(district).copy()
 
             # Dynamic coastal vulnerability (Open-Meteo Marine)
+            max_wave = _WAVE_HEIGHT_CACHE.get(district, 0.5)
             if is_coastal and not isinstance(res_marine, Exception) and res_marine and res_marine.status_code == 200:
                 try:
                     m_data = res_marine.json()
                     wave_heights = m_data.get("daily", {}).get("wave_height_max", [])
-                    max_wave = float(wave_heights[0]) if wave_heights and wave_heights[0] is not None else 0.5
-                    baseline_coastal = env.get("CoastalVulnerability", 2.0)
-                    env["CoastalVulnerability"] = round(min(10.0, max(2.0, baseline_coastal + (max_wave * 1.5))), 2)
-                    env["WaveHeightMax"] = round(max_wave, 2)
+                    if wave_heights and wave_heights[0] is not None:
+                        max_wave = float(wave_heights[0])
+                        _WAVE_HEIGHT_CACHE[district] = max_wave
                 except Exception:
                     pass
+            baseline_coastal = env.get("CoastalVulnerability", 2.0)
+            env["CoastalVulnerability"] = round(min(10.0, max(2.0, baseline_coastal + (max_wave * 1.5))), 2)
+            env["WaveHeightMax"] = round(max_wave, 2)
 
             # Dynamic river discharge and dam stress (Open-Meteo Flood)
-            discharge = 1.5
-            if not isinstance(res_flood, Exception) and res_flood.status_code == 200:
+            discharge = _RIVER_DISCHARGE_CACHE.get(district, 1.5)
+            if not isinstance(res_flood, Exception) and res_flood and res_flood.status_code == 200:
                 try:
                     f_data = res_flood.json()
                     discharge_list = f_data.get("daily", {}).get("river_discharge", [])
                     if discharge_list and discharge_list[0] is not None:
                         discharge = float(discharge_list[0])
-                    baseline_dams = env.get("DamsQuality", 5.0)
-                    env["DamsQuality"] = round(max(1.0, min(10.0, baseline_dams - (discharge / 50.0))), 2)
-                    env["RiverDischarge"] = round(discharge, 2)
+                        _RIVER_DISCHARGE_CACHE[district] = discharge
                 except Exception:
                     pass
+            baseline_dams = env.get("DamsQuality", 5.0)
+            env["DamsQuality"] = round(max(1.0, min(10.0, baseline_dams - (discharge / 50.0))), 2)
+            env["RiverDischarge"] = round(discharge, 2)
 
             # Dynamic deforestation / soil moisture (NASA POWER)
-            if not isinstance(res_nasa, Exception) and res_nasa.status_code == 200:
+            soil_moisture = _SOIL_MOISTURE_CACHE.get(district, 0.52)
+            if not isinstance(res_nasa, Exception) and res_nasa and res_nasa.status_code == 200:
                 try:
                     n_data = res_nasa.json()
                     params = n_data.get("properties", {}).get("parameter", {})
                     gwettop_vals = [v for v in params.get("GWETTOP", {}).values() if v != -999.0]
-                    soil_moisture = float(gwettop_vals[-1]) if gwettop_vals else 0.5
-                    baseline_forest = env.get("Deforestation", 4.0)
-                    env["Deforestation"] = round(min(10.0, max(1.0, baseline_forest + (0.5 - soil_moisture) * 2.0)), 2)
-                    env["SoilMoisture"] = round(soil_moisture, 2)
+                    if gwettop_vals:
+                        soil_moisture = float(gwettop_vals[-1])
+                        _SOIL_MOISTURE_CACHE[district] = soil_moisture
                 except Exception:
                     pass
+            baseline_forest = env.get("Deforestation", 4.0)
+            env["Deforestation"] = round(min(10.0, max(1.0, baseline_forest + (0.5 - soil_moisture) * 2.0)), 2)
+            env["SoilMoisture"] = round(soil_moisture, 2)
 
             # Dynamic drainage slope (Elevation)
             if elevation < 20.0:

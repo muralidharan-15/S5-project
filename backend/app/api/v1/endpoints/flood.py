@@ -21,7 +21,19 @@ from app.ml.explainability import compute_shap_explanation
 router = APIRouter()
 
 _DASHBOARD_CACHE: Dict[str, Any] = {}
-_CACHE_TTL_SECONDS = 300  # 5 minutes TTL for live telemetry
+_CACHE_TTL_SECONDS = 900  # 15 minutes TTL for live telemetry
+_PREWARM_STARTED = False
+
+
+async def _background_warm_top_districts():
+    """Pre-computes top districts in the background so mobile switches are instantaneous."""
+    top = ["Virudhunagar", "Chennai", "Coimbatore", "Madurai", "Cuddalore", "Salem", "Tiruchirappalli"]
+    for d in top:
+        if d not in _DASHBOARD_CACHE:
+            try:
+                await get_dashboard_data(district=d)
+            except Exception:
+                pass
 
 
 class AlertSubscriptionRequest(BaseModel):
@@ -108,6 +120,12 @@ async def get_dashboard_data(
     """
     if district not in settings.DISTRICTS:
         district = "Coimbatore"
+
+    global _PREWARM_STARTED
+    if not _PREWARM_STARTED:
+        _PREWARM_STARTED = True
+        import asyncio
+        asyncio.create_task(_background_warm_top_districts())
 
     now = time.time()
     if not force_refresh and district in _DASHBOARD_CACHE:

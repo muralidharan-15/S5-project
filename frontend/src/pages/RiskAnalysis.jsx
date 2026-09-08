@@ -26,9 +26,9 @@ const RiskAnalysis = ({ district = 'Virudhunagar' }) => {
     ? Math.round(data.rainfall_risk.probability)
     : data?.rainfall_risk?.raw_risk_percentage !== undefined
     ? Math.round(data.rainfall_risk.raw_risk_percentage)
-    : 67;
+    : null;
 
-  const riskLevel = data?.rainfall_risk?.level || data?.rainfall_risk?.flood_risk_level || (riskPercent >= 70 ? 'HIGH' : riskPercent >= 40 ? 'MODERATE' : 'LOW');
+  const riskLevel = data?.rainfall_risk?.level || data?.rainfall_risk?.flood_risk_level || (riskPercent !== null ? (riskPercent >= 70 ? 'HIGH' : riskPercent >= 40 ? 'MODERATE' : 'LOW') : 'LOW');
 
   // Map live SHAP explainability drivers if available from backend
   const backendDrivers = data?.rainfall_risk?.explainability?.top_drivers ||

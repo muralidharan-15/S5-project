@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchDashboardData } from '../api/floodApi';
+import { fetchDashboardData, prefetchDistricts } from '../api/floodApi';
 
 const DEFAULT_TN_DISTRICTS = [
   'Ariyalur', 'Chengalpattu', 'Chennai', 'Coimbatore', 'Cuddalore', 'Dharmapuri',
@@ -23,6 +23,17 @@ const Dashboard = ({
 
   const availableDistricts = districtsList && districtsList.length > 0 ? districtsList : DEFAULT_TN_DISTRICTS;
 
+  // Background pre-fetch top popular districts after initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      prefetchDistricts([
+        'Virudhunagar', 'Chennai', 'Coimbatore', 'Madurai', 'Cuddalore',
+        'Salem', 'Tiruchirappalli', 'Kanyakumari', 'Thanjavur', 'Tirunelveli'
+      ]);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     let isMounted = true;
     const load = async () => {
@@ -44,13 +55,15 @@ const Dashboard = ({
     };
   }, [district]);
 
+  const isInitialLoading = loading && !data;
+
   const riskPercent = data?.rainfall_risk?.probability !== undefined
     ? Math.round(data.rainfall_risk.probability)
     : data?.rainfall_risk?.raw_risk_percentage !== undefined
     ? Math.round(data.rainfall_risk.raw_risk_percentage)
-    : 67;
+    : null;
 
-  const riskLevel = data?.rainfall_risk?.level || data?.rainfall_risk?.flood_risk_level || (riskPercent >= 70 ? 'HIGH' : riskPercent >= 40 ? 'MODERATE' : 'LOW');
+  const riskLevel = data?.rainfall_risk?.level || data?.rainfall_risk?.flood_risk_level || (riskPercent !== null ? (riskPercent >= 70 ? 'HIGH' : riskPercent >= 40 ? 'MODERATE' : 'LOW') : 'LOW');
 
   const weather = {
     rainfall_1day: data?.rainfall_features?.rainfall_1day ?? data?.weather?.rainfall ?? 0.0,
@@ -73,16 +86,17 @@ const Dashboard = ({
     : `1 dam in Danger, 1 in Warning near ${district}`;
 
   const forecastList = data?.evaluated_7day_forecast || [
-    { day_label: 'Today', probability: 67, level: 'HIGH' },
-    { day_label: 'Tomorrow', probability: 72, level: 'HIGH' },
-    { day_label: 'Wed', probability: 45, level: 'MODERATE' },
-    { day_label: 'Thu', probability: 30, level: 'LOW' },
-    { day_label: 'Fri', probability: 20, level: 'LOW' },
+    { day_label: 'Today', probability: '--', level: 'LOW' },
+    { day_label: 'Tomorrow', probability: '--', level: 'LOW' },
+    { day_label: 'Wed', probability: '--', level: 'LOW' },
+    { day_label: 'Thu', probability: '--', level: 'LOW' },
+    { day_label: 'Fri', probability: '--', level: 'LOW' },
   ];
 
   // SVG circular circumference for r=40 is 2 * PI * 40 ~= 251.2
-  const strokeDashoffset = 251.2 - (251.2 * riskPercent) / 100;
+  const strokeDashoffset = riskPercent !== null ? (251.2 - (251.2 * riskPercent) / 100) : 251.2;
   const riskColor = riskLevel === 'HIGH' ? '#EA580C' : riskLevel === 'MODERATE' ? '#D97706' : '#16A34A';
+
 
   return (
     <div className="px-container-padding-mobile md:px-container-padding-desktop pb-32 md:pb-12 pt-4 flex flex-col gap-6 animate-fadeIn">
@@ -138,7 +152,15 @@ const Dashboard = ({
                 >
                   Manual Selection
                 </span>
-                {data?.isFallback ? (
+                {loading ? (
+                  <span
+                    id="telemetry-loading-badge"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+                    Syncing Live Telemetry...
+                  </span>
+                ) : data?.isFallback ? (
                   <span
                     id="fallback-badge"
                     className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300"
@@ -262,16 +284,29 @@ const Dashboard = ({
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-[52px] font-extrabold text-[#0F172A] leading-none tracking-tight">
-                  {riskPercent}
-                  <span className="text-2xl font-bold text-slate-400">%</span>
-                </span>
-                <span
-                  className="text-[11px] font-bold uppercase tracking-widest mt-1"
-                  style={{ color: riskColor }}
-                >
-                  {riskLevel}
-                </span>
+                {isInitialLoading ? (
+                  <>
+                    <span className="material-symbols-outlined text-4xl text-primary animate-spin mb-1">
+                      sync
+                    </span>
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
+                      Analyzing
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-[52px] font-extrabold text-[#0F172A] leading-none tracking-tight">
+                      {riskPercent !== null ? riskPercent : '--'}
+                      <span className="text-2xl font-bold text-slate-400">%</span>
+                    </span>
+                    <span
+                      className="text-[11px] font-bold uppercase tracking-widest mt-1"
+                      style={{ color: riskColor }}
+                    >
+                      {riskLevel}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 
