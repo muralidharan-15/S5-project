@@ -17,8 +17,9 @@ const getBaseUrl = () => {
 
 const API_BASE_URL = getBaseUrl();
 
-// Bypass Ngrok free tier browser interstitial page for mobile API calls
+// Bypass Ngrok and LocalTunnel interstitial reminder pages for mobile API calls
 axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'true';
+axios.defaults.headers.common['Bypass-Tunnel-Reminder'] = 'true';
 
 // Fallback data for all 38 Tamil Nadu districts
 const getFallbackDistricts = () => {
@@ -206,3 +207,4 @@ export const subscribeAlert = async (subscriptionData) => {
     };
   }
 };
+

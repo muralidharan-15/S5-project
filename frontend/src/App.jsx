@@ -59,6 +59,10 @@ function App() {
     'Viluppuram', 'Virudhunagar'
   ]);
 
+  const handleSelectDistrict = (district) => {
+    setSelectedDistrict(district);
+  };
+
   useEffect(() => {
     const loadDistricts = async () => {
       try {
@@ -87,14 +91,14 @@ function App() {
         {/* Desktop Sticky Header */}
         <DesktopTopAppBar
           currentDistrict={selectedDistrict}
-          onSelectDistrict={setSelectedDistrict}
+          onSelectDistrict={handleSelectDistrict}
           districts={districtsList}
         />
 
         {/* Mobile Sticky Header */}
         <MobileHeader
           currentDistrict={selectedDistrict}
-          onSelectDistrict={setSelectedDistrict}
+          onSelectDistrict={handleSelectDistrict}
           districts={districtsList}
         />
 
@@ -106,7 +110,7 @@ function App() {
               element={
                 <Dashboard
                   district={selectedDistrict}
-                  onSelectDistrict={setSelectedDistrict}
+                  onSelectDistrict={handleSelectDistrict}
                   districtsList={districtsList}
                 />
               }

@@ -332,3 +332,5 @@ def subscribe_alert(payload: AlertSubscriptionRequest):
         "status": "success",
         "message": f"Successfully subscribed {payload.name} ({payload.email}) for {payload.district} district emergency alerts via {payload.channel}."
     }
+
+

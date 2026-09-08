@@ -12,7 +12,11 @@ const DEFAULT_TN_DISTRICTS = [
   'Viluppuram', 'Virudhunagar'
 ];
 
-const Dashboard = ({ district = 'Virudhunagar', onSelectDistrict, districtsList = [] }) => {
+const Dashboard = ({
+  district = 'Virudhunagar',
+  onSelectDistrict,
+  districtsList = []
+}) => {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -124,9 +128,15 @@ const Dashboard = ({ district = 'Virudhunagar', onSelectDistrict, districtsList 
               <span className="material-symbols-outlined text-2xl">location_on</span>
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Target District Monitoring
+                </span>
+                <span
+                  id="manual-badge"
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200"
+                >
+                  Manual Selection
                 </span>
                 {data?.isFallback ? (
                   <span
